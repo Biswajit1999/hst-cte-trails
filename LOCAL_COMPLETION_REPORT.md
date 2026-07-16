@@ -1,8 +1,8 @@
 # Local Completion Report — HST ACS/WFC Two-Axis CTE Trail Audit
 
-Author: Biswajit Jana. This report documents a local Claude Code implementation pass.
+Author: Biswajit Jana. This report documents a local implementation pass.
 No git operations were performed (no commit, push, remote, or repository creation), per
-`CLAUDE_TASK.md`. Nothing has been published; the review checklist at the end is for
+docs/VALIDATION_CONTRACT.md. Nothing has been published; the review checklist at the end is for
 Biswajit to work through before any manual push.
 
 ## 1. Environment
@@ -171,7 +171,7 @@ Queried live against MAST (`astroquery.mast.Observations`), no fabricated metada
   Across 15 independent noise realizations at signal level (flux 20,000 e⁻, trail
   amplitude fraction 0.05, length 6 px), worst-case amplitude recovery error was 6.8%,
   worst-case length recovery error was 10.6%; the automated test enforces 15%/25%
-  tolerances with margin. This is the pass/fail gate CLAUDE_TASK.md requires before
+  tolerances with margin. This is the pass/fail gate docs/VALIDATION_CONTRACT.md requires before
   trusting the pipeline on real data.
 - **Null control**: a flat, no-trail synthetic profile fits an amplitude consistent
   with zero.

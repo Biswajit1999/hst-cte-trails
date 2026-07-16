@@ -38,7 +38,7 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 1. **Trail profile model:** exponential decay `I(d) = A * exp(-d / L) + c`, fit independently per axis, per source, per product type.
 2. **Suppression metric:** ratio (or fractional reduction) of total trailed charge FLC vs FLT, as a function of (a) source charge (flux), (b) local background level, (c) parallel transfer distance (row index from readout).
 3. **Hot pixels** (from the DQ mask / warm-pixel population) as a second, independent trail-injecting population, cross-checked against source-star trails with bootstrap uncertainty.
-4. **Synthetic injection-recovery gate:** before touching real data, inject known synthetic exponential trails into a blank/low-background cutout and confirm the fitting code recovers the injected amplitude/length within a documented tolerance — this is the pass/fail gate required by `docs/VALIDATION_CONTRACT.md` and `CLAUDE_TASK.md` ("stop conditions" — if synthetic recovery fails, stop and document, do not proceed to interpret real data as if it worked).
+4. **Synthetic injection-recovery gate:** before touching real data, inject known synthetic exponential trails into a blank/low-background cutout and confirm the fitting code recovers the injected amplitude/length within a documented tolerance — this is the pass/fail gate required by `docs/VALIDATION_CONTRACT.md` and `docs/VALIDATION_CONTRACT.md` ("stop conditions" — if synthetic recovery fails, stop and document, do not proceed to interpret real data as if it worked).
 
 ## 5. File-level task list
 
@@ -60,7 +60,7 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 - `hot_pixels.py`: DQ-mask-driven + sigma-clipped hot/warm pixel detection, independent of source detection.
 - `trail_profiles.py`: `photutils`-based source detection, per-source 1-D trail extraction along serial and parallel axes, exponential model fit (`scipy.optimize.curve_fit`) with fit-quality diagnostics.
 - `stacking.py`: charge-binned and transfer-distance-binned stacking/averaging of trail profiles for a per-bin S/N boost, explicit bin edges recorded in output.
-- `uncertainty.py`: bootstrap resampling (per `config/analysis.yml`: 1000 resamples, 95% CI) for all reported metrics; separate numerical (fit-convergence) uncertainty from measurement (photon/read-noise, bootstrap) uncertainty per `CLAUDE_TASK.md` rule 6.
+- `uncertainty.py`: bootstrap resampling (per `config/analysis.yml`: 1000 resamples, 95% CI) for all reported metrics; separate numerical (fit-convergence) uncertainty from measurement (photon/read-noise, bootstrap) uncertainty per this project's non-negotiable restrictions rule 6.
 - `core.py`: keep existing starter functions (used by smoke tests); add a thin `run_pipeline()` orchestrator that composes the modules above — this is what `scripts/run_analysis.py` calls for the non-demo path.
 
 ### Phase 5 — Validation and QA
@@ -80,7 +80,7 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 - `web-react/src/App.jsx`: fetch `results/summary.json` (copied into `web-react/public/results/`) in addition to `project.json`; render real metrics with uncertainty, a provenance/download panel (manifest rows, checksums), methodology/validation/limitations tabs, and the figure gallery (served from `figures/`). Preserve the existing restrained dark dashboard styling; no fake "live" language.
 
 ### Phase 8 — Verification
-- Run the full command sequence from `CLAUDE_TASK.md`/root instructions using the `hst-acs-cte-audit` conda interpreter, repair failures, then write `LOCAL_COMPLETION_REPORT.md`.
+- Run the full command sequence from the project root instructions using the `hst-acs-cte-audit` conda interpreter, repair failures, then write `LOCAL_COMPLETION_REPORT.md`.
 
 ## 6. Validation thresholds (from `docs/VALIDATION_CONTRACT.md`, made concrete)
 
@@ -98,9 +98,9 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 - **LaTeX compilation cannot be verified locally** (no `pdflatex`) — documented as a limitation in `LOCAL_COMPLETION_REPORT.md`, not silently ignored.
 - **Real FLT/FLC download is ~1 GB and network-dependent** — if the download fails or is truncated mid-session, the pipeline must fail loudly (`ArchiveAccessError`), not fall back to fabricated values; the `--demo` synthetic path remains the fallback smoke path only, and is never presented as a scientific result.
 - **photutils 1.13.0 API surface** will be checked against the installed version at implementation time (not assumed from memory) before writing `trail_profiles.py`.
-- If synthetic injection-recovery fails to meet the thresholds above, per `CLAUDE_TASK.md` stop conditions: stop, document in `results/warnings.json` and `LOCAL_COMPLETION_REPORT.md`, and do not proceed to interpret the real FLT/FLC data as if validated.
+- If synthetic injection-recovery fails to meet the thresholds above, per this project's non-negotiable restrictions stop conditions: stop, document in `results/warnings.json` and `LOCAL_COMPLETION_REPORT.md`, and do not proceed to interpret the real FLT/FLC data as if validated.
 - STScI ACS Data Handbook / CALACS documentation citations will use stable STScI documentation URLs rather than invented DOIs; if no stable citation form is found, mark `TODO_VERIFY`.
 
 ## 8. Non-negotiables carried forward
 
-No `git commit`/`push`/remote creation at any phase. No Claude/Anthropic/AI attribution in any file. Biswajit Jana remains sole author in `CITATION.cff`. No fabricated data, benchmarks, or citation metadata.
+No `git commit`/`push`/remote creation at any phase. Biswajit Jana remains sole author in `CITATION.cff`. No fabricated data, benchmarks, or citation metadata.

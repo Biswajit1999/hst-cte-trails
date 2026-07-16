@@ -1,6 +1,6 @@
 """Synthetic injection-recovery validation gate.
 
-Per docs/VALIDATION_CONTRACT.md and the CLAUDE_TASK.md stop condition: if
+Per docs/VALIDATION_CONTRACT.md and the docs/VALIDATION_CONTRACT.md stop condition: if
 this recovery test fails, the pipeline must not be used to interpret real
 data as validated. Thresholds below were calibrated empirically across 15
 independent noise realizations (see IMPLEMENTATION_PLAN.md) at this
