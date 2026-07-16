@@ -1,0 +1,42 @@
+{
+  "title": "HST ACS/WFC Two-Axis CTE Trail Audit",
+  "repo": "hst-cte-trails",
+  "category": "CCD detector physics / image analysis",
+  "status": "BUILD_FIRST",
+  "priority": 9.6,
+  "question": "How effectively do current ACS/WFC calibrated products suppress serial and parallel charge-transfer trails across source charge, background and transfer distance?",
+  "gap": "An independent archive-product verification; not a replacement for CALACS or a new PCTETAB.",
+  "dataMode": "real public HST ACS/WFC FLT/FLC products",
+  "novelty": "An independent archive-product verification; not a replacement for CALACS or a new PCTETAB.",
+  "figures": [
+    { "id": "fig01_detector_geometry", "label": "Detector geometry" },
+    { "id": "fig02_example_trails", "label": "Example trails" },
+    { "id": "fig03_flt_vs_flc_profiles", "label": "FLT vs FLC profiles" },
+    { "id": "fig04_suppression_vs_charge", "label": "Suppression vs charge" },
+    { "id": "fig05_residual_vs_transfer_distance", "label": "Residual vs transfer distance" },
+    { "id": "fig06_injection_recovery", "label": "Injection recovery" }
+  ],
+  "validationContract": [
+    "synthetic exponential trails",
+    "total trail-charge recovery",
+    "bootstrap hot pixels",
+    "FLT/FLC comparison",
+    "header-driven geometry"
+  ],
+  "methodology": "Source detection via photutils DAOStarFinder on background-subtracted FLC images. Per-source trail profiles are extracted along the parallel-readout axis (header-derived geometry, PSF-wing buffer excluded) and fit to a single empirical exponential I(d)=A*exp(-d/L)+c independently for FLT and FLC. Suppression is 1-(A_FLC*L_FLC)/(A_FLT*L_FLT). Observational uncertainty is bootstrap-resampled; numerical convergence is assessed separately via fit covariance conditioning.",
+  "assumptions": [
+    "Readout-corner geometry is inferred from the CCDAMP/CCDCHIP header keywords using a documented, explicit convention (see docs/ASSUMPTIONS_AND_LIMITATIONS.md), not independently re-derived from CALACS source.",
+    "Trails are modelled as a single empirical exponential (Massey et al. 2010; Anderson & Bedin 2010 form), not a multi-trap-species physical simulation.",
+    "A 4-pixel buffer around each source excludes PSF-wing contamination before trail fitting."
+  ],
+  "limitations": [
+    "First-release, bounded scope: an independent archive-product check, not a replacement for CALACS or a new PCTETAB.",
+    "The deterministic real-data sample is small by design; under-populated charge/transfer-distance bins are flagged in results/warnings.json, not hidden.",
+    "reports/report.tex could not be compiled to PDF in this environment (no local LaTeX toolchain); only structural completeness was verified."
+  ],
+  "citation": {
+    "author": "Biswajit Jana",
+    "license": "BSD-3-Clause (original code); mission/archive products retain their original terms",
+    "repository": "https://github.com/Biswajit1999/hst-cte-trails"
+  }
+}
