@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import scienceplots  # noqa: F401 - importing registers the bundled matplotlib styles
 
 from hst_acs_two_axis_cte_audit import __version__
 from hst_acs_two_axis_cte_audit.config import load_config
@@ -34,6 +35,8 @@ from hst_acs_two_axis_cte_audit.trail_profiles import (
     fit_exponential_trail,
     exponential_trail_model,
 )
+
+plt.style.use(["science", "no-latex"])
 
 
 def _sidecar(path: Path, *, data_kind: str, sample_size: int, units: str, config_path: Path, extra: dict | None = None) -> None:
@@ -98,7 +101,7 @@ def make_demo_figures(out_dir: Path, config_path: Path) -> None:
         ax.set_title(label)
         ax.set_xlabel("Column offset (pixels)")
     axes[0].set_ylabel("Row offset (pixels)")
-    fig.suptitle("Example parallel CTE trail behind a synthetic point source — SYNTHETIC DEMO")
+    fig.suptitle("Example parallel CTE trail behind a synthetic point source - SYNTHETIC DEMO")
     fig.colorbar(im, ax=axes, shrink=0.8, label="Counts (electrons)")
     path = _save(fig, out_dir, "fig02_example_trails")
     _sidecar(path, data_kind=data_kind, sample_size=1, units="electrons", config_path=config_path)
@@ -115,7 +118,7 @@ def make_demo_figures(out_dir: Path, config_path: Path) -> None:
     ax.plot(flc_profile.distances, exponential_trail_model(flc_profile.distances, flc_fit.amplitude, flc_fit.length, flc_fit.offset), "-", color="tab:blue", label="FLC fit")
     ax.set_xlabel("Parallel transfer distance from source (pixels)")
     ax.set_ylabel("Counts (electrons)")
-    ax.set_title("FLT vs FLC trail profile — SYNTHETIC DEMO (n=1 source)")
+    ax.set_title("FLT vs FLC trail profile - SYNTHETIC DEMO (n=1 source)")
     ax.legend()
     path = _save(fig, out_dir, "fig03_flt_vs_flc_profiles")
     _sidecar(path, data_kind=data_kind, sample_size=1, units="electrons vs pixels", config_path=config_path,
@@ -142,7 +145,7 @@ def make_demo_figures(out_dir: Path, config_path: Path) -> None:
     ax.plot(charges, suppressions, "o-")
     ax.set_xlabel("Source charge (electrons)")
     ax.set_ylabel("Trail-charge suppression fraction (FLC vs FLT)")
-    ax.set_title(f"Suppression vs source charge — SYNTHETIC DEMO (n={len(charges)} sources)")
+    ax.set_title(f"Suppression vs source charge - SYNTHETIC DEMO (n={len(charges)} sources)")
     ax.set_ylim(0, 1)
     path = _save(fig, out_dir, "fig04_suppression_vs_charge")
     _sidecar(path, data_kind=data_kind, sample_size=len(charges), units="electrons vs dimensionless", config_path=config_path)
@@ -151,7 +154,7 @@ def make_demo_figures(out_dir: Path, config_path: Path) -> None:
     ax.plot(distances, suppressions, "o-", color="tab:green")
     ax.set_xlabel("Parallel transfer distance (pixels)")
     ax.set_ylabel("Trail-charge suppression fraction (FLC vs FLT)")
-    ax.set_title(f"Suppression vs transfer distance — SYNTHETIC DEMO (n={len(distances)} sources)")
+    ax.set_title(f"Suppression vs transfer distance - SYNTHETIC DEMO (n={len(distances)} sources)")
     ax.set_ylim(0, 1)
     path = _save(fig, out_dir, "fig05_residual_vs_transfer_distance")
     _sidecar(path, data_kind=data_kind, sample_size=len(distances), units="pixels vs dimensionless", config_path=config_path)
@@ -174,7 +177,7 @@ def make_demo_figures(out_dir: Path, config_path: Path) -> None:
     ax.plot(truth_amplitudes, recovered_amplitudes, "o", color="tab:red", label="recovered vs injected")
     ax.set_xlabel("Injected trail amplitude (electrons)")
     ax.set_ylabel("Recovered trail amplitude (electrons)")
-    ax.set_title(f"Injection-recovery validation — SYNTHETIC DEMO (n={len(truth_amplitudes)})")
+    ax.set_title(f"Injection-recovery validation - SYNTHETIC DEMO (n={len(truth_amplitudes)})")
     ax.legend()
     path = _save(fig, out_dir, "fig06_injection_recovery")
     _sidecar(path, data_kind=data_kind, sample_size=len(truth_amplitudes), units="electrons", config_path=config_path)
@@ -238,6 +241,10 @@ def make_real_figures(out_dir: Path, config_path: Path, manifest_path: Path, raw
             f"none of the {len(candidates)} brightest candidate sources in {first_pair.rootname} "
             "had a converging FLT+FLC trail fit"
         )
+    assert flt_profile is not None
+    assert flc_profile is not None
+    assert flt_fit is not None
+    assert flc_fit is not None
 
     y0, y1 = max(0, int(src.y) - 25), min(geometry.naxis2, int(src.y) + 5)
     x0, x1 = max(0, int(src.x) - 15), min(geometry.naxis1, int(src.x) + 15)

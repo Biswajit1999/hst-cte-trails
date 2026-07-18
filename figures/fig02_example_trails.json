@@ -3,7 +3,7 @@
   "data_kind": "real public HST ACS/WFC FLT/FLC products",
   "sample_size": 1,
   "units": "electrons",
-  "git_commit": "LOCAL_UNCOMMITTED",
+  "git_commit": "6ec3144",
   "config_sha256": "e15b61df2c0d53ba4dd2266af600467b3b65086acccd45dd11f7f5b715c1bd74",
   "package_version": "0.1.0"
 }
