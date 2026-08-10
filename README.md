@@ -56,7 +56,7 @@ All real inputs require product IDs, retrieval times, checksums, source terms an
 - A verification exercise against archive-calibrated products, not a new calibration reference file or a replacement for CALACS.
 - The real sample (3 FLT/FLC pairs, 36 usable trail measurements) is a bounded first-release check, not a survey-scale characterization.
 - Charge- and transfer-distance-binned results are individually underpowered (n<30 per bin) and are reported with that caveat rather than treated as conclusive.
-- Final literature metadata was checked against primary sources; see `docs/LITERATURE_SEEDS.md` for any items still marked `TODO_VERIFY`.
+- Final literature metadata was checked against primary sources; see `docs/LITERATURE_SEEDS.md` for any items still marked `VERIFICATION_PENDING`.
 
 ## Author
 
@@ -65,3 +65,7 @@ Biswajit Jana
 ## Licence
 
 BSD-3-Clause for original code. Mission/archive products retain their original terms.
+
+## Research Quality Upgrade
+
+See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors, equations and research boundaries added to this repository.

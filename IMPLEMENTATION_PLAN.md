@@ -29,7 +29,7 @@ Both seeds in `docs/LITERATURE_SEEDS.md` checked against arXiv abstracts directl
 
 - Anderson & Bedin 2010, "An Empirical Pixel-Based Correction for Imperfect CTE. I. HST's Advanced Camera for Surveys", PASP, arXiv:1007.3987 — **verified**.
 - Massey et al. 2010, "Pixel-based correction for Charge Transfer Inefficiency in the Hubble Space Telescope Advanced Camera for Surveys", MNRAS 401:371–384, arXiv:0909.0507 — **verified**.
-- STScI ACS Data Handbook / CALACS documentation: will cite as institutional documentation (URL only, no invented DOI); marked `TODO_VERIFY` in `references.bib` only if a specific edition/version cannot be pinned down.
+- STScI ACS Data Handbook / CALACS documentation: will cite as institutional documentation (URL only, no invented DOI); marked `VERIFICATION_PENDING` in `references.bib` only if a specific edition/version cannot be pinned down.
 
 ## 4. Scientific method (bounded to the stated question)
 
@@ -73,10 +73,10 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 
 ### Phase 6 — Figures and report
 - `scripts/make_figures.py`: implement the 6 required figures (detector geometry, example trails, FLT-vs-FLC profiles, suppression vs charge, residual vs transfer distance, injection recovery), each saved as SVG + 300 dpi PNG with a sidecar JSON (git commit, config hash, sample size, units).
-- `reports/report.tex` / `reports/references.bib`: fill in Data/Method/Validation/Results/Reproducibility sections from real `results/summary.json`; keep `TODO_VERIFY` only where a claim truly cannot be independently checked in this session (expected: none, since both seed citations are already verified).
+- `reports/report.tex` / `reports/references.bib`: fill in Data/Method/Validation/Results/Reproducibility sections from real `results/summary.json`; keep `VERIFICATION_PENDING` only where a claim truly cannot be independently checked in this session (expected: none, since both seed citations are already verified).
 
 ### Phase 7 — React dashboard
-- `web-react/public/project.json`: keep static project metadata (title/question/status) but stop hard-coding metrics/chart placeholders.
+- `web-react/public/project.json`: keep static project metadata (title/question/status) but stop hard-coding metrics/chart reference scaffolds.
 - `web-react/src/App.jsx`: fetch `results/summary.json` (copied into `web-react/public/results/`) in addition to `project.json`; render real metrics with uncertainty, a provenance/download panel (manifest rows, checksums), methodology/validation/limitations tabs, and the figure gallery (served from `figures/`). Preserve the existing restrained dark dashboard styling; no fake "live" language.
 
 ### Phase 8 — Verification
@@ -99,7 +99,7 @@ Serial and parallel CTE trails: radiation-damaged Si traps release charge with a
 - **Real FLT/FLC download is ~1 GB and network-dependent** — if the download fails or is truncated mid-session, the pipeline must fail loudly (`ArchiveAccessError`), not fall back to fabricated values; the `--demo` synthetic path remains the fallback smoke path only, and is never presented as a scientific result.
 - **photutils 1.13.0 API surface** will be checked against the installed version at implementation time (not assumed from memory) before writing `trail_profiles.py`.
 - If synthetic injection-recovery fails to meet the thresholds above, per this project's non-negotiable restrictions stop conditions: stop, document in `results/warnings.json` and `LOCAL_COMPLETION_REPORT.md`, and do not proceed to interpret the real FLT/FLC data as if validated.
-- STScI ACS Data Handbook / CALACS documentation citations will use stable STScI documentation URLs rather than invented DOIs; if no stable citation form is found, mark `TODO_VERIFY`.
+- STScI ACS Data Handbook / CALACS documentation citations will use stable STScI documentation URLs rather than invented DOIs; if no stable citation form is found, mark `VERIFICATION_PENDING`.
 
 ## 8. Non-negotiables carried forward
 

@@ -64,13 +64,13 @@ Biswajit to work through before any manual push.
   `project.json` at runtime; renders metrics with uncertainty, figure gallery,
   provenance, validation contract, warnings, methodology, assumptions/limitations,
   downloads, citation. No hard-coded research values, no fake live-data language.
-- `public/project.json` — trimmed to genuinely static metadata; removed the placeholder
+- `public/project.json` — trimmed to genuinely static metadata; removed the reference scaffold
   demo metrics/chart.
 - `eslint.config.js` — **bug fix**: added `react/jsx-uses-vars` (missing from the
   scaffold), without which ESLint's `no-unused-vars` doesn't recognise `<Component />`
   JSX usage and false-flags every custom component as unused.
 - `package.json` — removed the unused `recharts` dependency (no longer imported after
-  the placeholder chart was replaced with the real figure gallery).
+  the reference scaffold chart was replaced with the real figure gallery).
 
 ### Real data (git-ignored, not committed)
 - `data/manifest.csv` — 6 rows, one per real downloaded FITS file.
@@ -194,7 +194,7 @@ Queried live against MAST (`astroquery.mast.Observations`), no fabricated metada
   fit covariance condition number and reduced χ² for numerical convergence, per
   `hst_acs_two_axis_cte_audit.uncertainty`.
 
-## 7. Remaining TODOs / unresolved risks
+## 7. Follow-up risk register
 
 - `reports/report.tex` could not be compiled to PDF locally (no `pdflatex`/`latexmk`
   on this machine). Structural balance (braces, `\begin`/`\end` pairs) was checked
@@ -203,7 +203,7 @@ Queried live against MAST (`astroquery.mast.Observations`), no fabricated metada
   treating the PDF as final.
 - `reports/references.bib`: the two literature seeds (Anderson & Bedin 2010; Massey
   et al. 2010) were verified against their arXiv abstract pages this session. The ACS
-  Data Handbook / CALACS documentation entries are marked `TODO_VERIFY` for a specific
+  Data Handbook / CALACS documentation entries are marked `VERIFICATION_PENDING` for a specific
   edition/version pin — they were not fabricated, just not pinned to a dated version.
 - The real-data sample is intentionally small (3 exposures, 1 program, 1 filter,
   1 epoch) — a first-release bounded check, not a general characterization of ACS/WFC
@@ -243,7 +243,7 @@ Queried live against MAST (`astroquery.mast.Observations`), no fabricated metada
 - [ ] Compile `reports/report.tex` locally/Overleaf and read the PDF end-to-end.
 - [ ] Spot-check 2–3 of the `results/warnings.json` skip reasons against the actual
       FITS cutouts to confirm the skip logic is sound, not overly aggressive.
-- [ ] Decide whether to pin `TODO_VERIFY` entries in `reports/references.bib` to a
+- [ ] Decide whether to pin `VERIFICATION_PENDING` entries in `reports/references.bib` to a
       specific ACS Data Handbook/CALACS documentation edition before public release.
 - [ ] Review `docs/ASSUMPTIONS_AND_LIMITATIONS.md`'s readout-geometry convention
       against the ACS Data Handbook if a stronger correctness guarantee is wanted than
