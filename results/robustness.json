@@ -1,0 +1,33 @@
+{
+  "scope": "Three consecutive exposures of one field; source-coordinate clusters are the resampling units.",
+  "measurement_count": 38,
+  "coordinate_cluster_count": 34,
+  "coordinate_tolerance_pixels": 0.75,
+  "cluster_median_suppression": 0.8834052694291574,
+  "cluster_bootstrap_95_interval": [
+    0.4945645527353407,
+    1.0938905609843967
+  ],
+  "cluster_bootstrap_resamples": 10000,
+  "exposure_medians": {
+    "jfnx01mhq": 0.5645408444199791,
+    "jfnx01miq": 1.1941109092370246,
+    "jfnx01mkq": 0.6115901389936218
+  },
+  "leave_one_exposure_out_medians": {
+    "jfnx01mhq": 1.025215414640423,
+    "jfnx01miq": 0.6115901389936218,
+    "jfnx01mkq": 0.8834052694291574
+  },
+  "archive_refresh": {
+    "baseline_commit": "5f175cf",
+    "baseline_product_date": "pre-2026-08-05 reprocessing",
+    "current_product_date": "2026-08-05",
+    "baseline_median_suppression": 0.7888485396297149,
+    "current_median_suppression": 0.8432495923016295,
+    "baseline_hot_pixel_mean_excess": -5.477700375113089,
+    "current_hot_pixel_mean_excess": 0.13960705463721465,
+    "all_six_sha256_changed": true
+  },
+  "claim_boundary": "Intervals describe estimator stability in this one-field, three-exposure sample. They are not a population-level calibration-accuracy interval."
+}

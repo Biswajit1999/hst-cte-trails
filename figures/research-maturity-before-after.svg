@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Research maturity before and after the archive robustness audit</title>
+  <desc id="desc">Repository-practice score increased from 68 before to 95 after. This rubric is not peer review.</desc>
+  <rect width="960" height="360" fill="#f8fafc"/>
+  <text x="64" y="66" font-family="Georgia,serif" font-size="30" font-weight="700" fill="#0f172a">Evidence maturity</text>
+  <text x="64" y="96" font-family="Arial,sans-serif" font-size="16" fill="#475569">Ten-dimension repository-practice rubric · not peer review</text>
+  <text x="64" y="164" font-family="Arial,sans-serif" font-size="18" fill="#334155">Before</text>
+  <rect x="180" y="140" width="612" height="34" rx="4" fill="#e2e8f0"/>
+  <rect x="180" y="140" width="416" height="34" rx="4" fill="#94a3b8"/>
+  <text x="814" y="165" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#334155">68</text>
+  <text x="64" y="238" font-family="Arial,sans-serif" font-size="18" fill="#334155">After</text>
+  <rect x="180" y="214" width="612" height="34" rx="4" fill="#e2e8f0"/>
+  <rect x="180" y="214" width="581" height="34" rx="4" fill="#0f766e"/>
+  <text x="814" y="239" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f766e">95</text>
+  <text x="180" y="300" font-family="Arial,sans-serif" font-size="15" fill="#475569">Added byte-level provenance gates, archive-refresh audit, dependence-aware resampling, deletion checks, bounded claims, CI and live evidence downloads.</text>
+</svg>

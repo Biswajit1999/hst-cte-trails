@@ -1,0 +1,7 @@
+design,omitted,rootname,median
+single_exposure,,jfnx01mhq,0.5645408444199791
+single_exposure,,jfnx01miq,1.1941109092370246
+single_exposure,,jfnx01mkq,0.6115901389936218
+leave_one_exposure_out,jfnx01mhq,,1.025215414640423
+leave_one_exposure_out,jfnx01miq,,0.6115901389936218
+leave_one_exposure_out,jfnx01mkq,,0.8834052694291574
