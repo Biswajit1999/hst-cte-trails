@@ -284,7 +284,7 @@ export default function App() {
                 <span className="grid size-9 place-items-center rounded-sm border border-blue-700/70 bg-blue-950/60 text-blue-300"><Layers3 size={18} aria-hidden="true" /></span>
                 <div>
                   <p className="instrument-label">Instrument audit · ACS/WFC</p>
-                  <p className="text-xs text-slate-500">two-axis charge-transfer diagnostics</p>
+                  <p className="text-xs text-slate-500">parallel-transfer trail diagnostics</p>
                 </div>
               </div>
               <p className="mb-4 text-sm font-medium text-blue-300">{p.category}</p>
