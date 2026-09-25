@@ -101,6 +101,43 @@ def read_manifest(manifest_path: str | Path) -> list[dict[str, str]]:
     return rows
 
 
+def verify_manifest_files(rows: list[dict[str, str]], raw_dir: str | Path) -> list[dict[str, object]]:
+    """Verify every manifest product against its committed size and SHA-256.
+
+    MAST calibrated products are mutable when the archive reprocesses an
+    exposure.  A product id alone therefore does not identify the bytes used
+    for an analysis; this check is a hard provenance gate, not an advisory.
+    """
+    base = Path(raw_dir)
+    receipts: list[dict[str, object]] = []
+    for row in rows:
+        product_id = row["product_id"]
+        path = base / f"{product_id}.fits"
+        if not path.is_file():
+            raise ProvenanceError(f"manifest product is missing: {path}")
+        actual_size = path.stat().st_size
+        expected_size = int(row["file_size_bytes"])
+        if actual_size != expected_size:
+            raise ProvenanceError(
+                f"{product_id}: size {actual_size} does not match manifest {expected_size}"
+            )
+        actual_sha256 = sha256_file(path)
+        expected_sha256 = row["sha256"].lower()
+        if actual_sha256 != expected_sha256:
+            raise ProvenanceError(
+                f"{product_id}: SHA-256 {actual_sha256} does not match manifest {expected_sha256}"
+            )
+        receipts.append(
+            {
+                "product_id": product_id,
+                "file_size_bytes": actual_size,
+                "sha256": actual_sha256,
+                "verified": True,
+            }
+        )
+    return receipts
+
+
 __all__ = [
     "MANIFEST_COLUMNS",
     "ManifestRow",
@@ -110,4 +147,5 @@ __all__ = [
     "sha256_bytes",
     "sha256_config",
     "sha256_file",
+    "verify_manifest_files",
 ]

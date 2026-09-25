@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from hst_acs_two_axis_cte_audit.provenance import (
     ManifestRow,
@@ -8,7 +9,9 @@ from hst_acs_two_axis_cte_audit.provenance import (
     get_git_commit,
     read_manifest,
     sha256_file,
+    verify_manifest_files,
 )
+from hst_acs_two_axis_cte_audit.exceptions import ProvenanceError
 from hst_acs_two_axis_cte_audit.config import load_config
 
 
@@ -43,6 +46,21 @@ def test_sha256_file_matches_known_content(tmp_path):
     digest = sha256_file(path)
     assert len(digest) == 64
     assert digest == sha256_file(path)
+
+
+def test_verify_manifest_files_accepts_exact_bytes(tmp_path):
+    payload = b"calibrated FITS fixture"
+    (tmp_path / "sample_flt.fits").write_bytes(payload)
+    rows = [{"product_id": "sample_flt", "sha256": sha256_file(tmp_path / "sample_flt.fits"), "file_size_bytes": str(len(payload))}]
+    receipts = verify_manifest_files(rows, tmp_path)
+    assert receipts[0]["verified"] is True
+
+
+def test_verify_manifest_files_rejects_changed_archive_product(tmp_path):
+    (tmp_path / "sample_flt.fits").write_bytes(b"new calibration bytes")
+    rows = [{"product_id": "sample_flt", "sha256": "0" * 64, "file_size_bytes": str(len(b"new calibration bytes"))}]
+    with pytest.raises(ProvenanceError, match="does not match manifest"):
+        verify_manifest_files(rows, tmp_path)
 
 
 def test_get_git_commit_never_raises(tmp_path):

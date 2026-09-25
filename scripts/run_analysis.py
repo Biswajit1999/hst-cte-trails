@@ -21,7 +21,12 @@ from hst_acs_two_axis_cte_audit.config import load_config
 from hst_acs_two_axis_cte_audit.core import demo_series, robust_summary, run_pipeline
 from hst_acs_two_axis_cte_audit.exceptions import ProjectError
 from hst_acs_two_axis_cte_audit.logging_utils import get_logger
-from hst_acs_two_axis_cte_audit.provenance import get_git_commit, read_manifest, sha256_config
+from hst_acs_two_axis_cte_audit.provenance import (
+    get_git_commit,
+    read_manifest,
+    sha256_config,
+    verify_manifest_files,
+)
 from hst_acs_two_axis_cte_audit.results_io import Metric, write_summary
 
 LOGGER = get_logger(__name__)
@@ -95,6 +100,9 @@ def run_real_data(config_path: Path, manifest_path: Path, raw_dir: Path, results
             "(with explicit operator authorization) before running the real-data pipeline."
         )
 
+    if config.provenance.verify_checksums:
+        verify_manifest_files(manifest_rows, raw_dir)
+
     tracemalloc.start()
     start = time.perf_counter()
 
@@ -137,6 +145,7 @@ def run_real_data(config_path: Path, manifest_path: Path, raw_dir: Path, results
         "git_commit": get_git_commit(Path(__file__).resolve().parents[1]),
         "package_version": __version__,
         "n_flt_flc_pairs": len({m.rootname for m in result.measurements}),
+        "input_receipts_verified": bool(config.provenance.verify_checksums),
     }
 
     results_dir.mkdir(exist_ok=True)
