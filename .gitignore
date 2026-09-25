@@ -8,7 +8,9 @@ __pycache__/
 .ipynb_checkpoints/
 data/raw/*
 !data/raw/README.md
-/results/
+/results/*
+!/results/*.json
+!/results/*.csv
 /build/
 /src/*.egg-info/
 web-react/node_modules/

@@ -1,4 +1,4 @@
-# HST ACS/WFC Two-Axis CTE Trail Audit
+# HST ACS/WFC Parallel-Trail Estimator Audit
 
 ![Cover](docs/cover.png)
 
@@ -6,7 +6,7 @@
 
 ## Scientific question
 
-How effectively do current ACS/WFC calibrated products suppress serial and parallel charge-transfer trails across source charge, background and transfer distance?
+How stable is a fitted parallel-trail suppression estimator across archive reprocessing, repeated exposures and exposure deletion?
 
 ## What this repository contributes
 
@@ -14,7 +14,11 @@ An independent archive-product verification; not a replacement for CALACS or a n
 
 ## Key result
 
-Across 3 real FLT/FLC pairs, 120 candidate trail sources were detected and 36 passed fit-quality and physical-plausibility checks (the remaining 84 were rejected and recorded, not silently dropped). Median trail-charge suppression fraction across the usable sample: **0.79**. Charge- and transfer-distance-binned means are reported, but every bin (n≈12–13) falls below this project's own `minimum_sample_size=30` threshold and is flagged as underpowered rather than overclaimed. Hot-pixel excess (DQ bit 16, verified directly against the real CALACS source) bootstraps to a mean of −5.5 e⁻ (95% CI [−7.8, −3.4], n=497,229 pixels). Full numbers, per-bin breakdowns and honest caveats are in `results/summary.json`, `results/warnings.json` and `reports/report.tex`.
+The September 2026 audit discovered that MAST had reprocessed all six calibrated products after the original run: every product kept the same archive identifier and byte size but changed SHA-256. Re-running against the current CALACS 10.4.1 products yields 38 accepted measurements from 120 candidates and a raw median fitted suppression fraction of **0.843**, versus **0.789** for the prior manifest snapshot.
+
+The dependence-aware result is deliberately less tidy. The 38 measurements form 34 detector-coordinate clusters; their median is **0.883**, with a cluster-bootstrap 95% interval of **[0.495, 1.094]**. Individual-exposure medians span **0.565–1.194**, and leave-one-exposure-out medians span **0.612–1.025**. The direction is positive in every exposure-level summary, but the magnitude is not stable enough to support a population-level calibration-accuracy claim.
+
+The DQ-bit diagnostic also changed from −5.48 e⁻ to +0.14 e⁻ after archive reprocessing. It is therefore treated as a calibration-version diagnostic, not evidence for or against trail suppression. Every exclusion and every underpowered bin remains published in `results/warnings.json`.
 
 ## Reproducing this result
 
@@ -28,7 +32,7 @@ python scripts/run_analysis.py --demo
 python scripts/make_figures.py --demo
 ```
 
-The demo path above uses clearly-labelled synthetic data for a fast smoke test. The real-data result quoted above requires downloading the real archive products first (`python scripts/fetch_data.py --i-have-authorization`), then `python scripts/run_analysis.py` and `python scripts/make_figures.py` without `--demo`.
+The demo path above uses clearly-labelled synthetic data for a fast smoke test. The real-data result requires the exact products in `data/manifest.csv`. `scripts/run_analysis.py` now stops on any size or SHA-256 mismatch rather than analyzing silently reprocessed bytes. After a verified real-data run, execute `python scripts/analyze_robustness.py`, `python scripts/make_figures.py`, and `python scripts/sync_web_assets.py`.
 
 For the web dashboard:
 
@@ -49,12 +53,14 @@ npm run dev
 
 ## Reproducibility and FAIR practice
 
-All real inputs require product IDs, retrieval times, checksums, source terms and deterministic selection manifests. Derived results record the software commit and configuration hash.
+All real inputs have exact MAST download URLs, retrieval times, byte sizes, SHA-256 receipts, selection rules and source terms. Derived results record the software commit and configuration hash. The committed measurement ledger and robustness evidence make every displayed aggregate independently inspectable.
 
 ## Limitations
 
 - A verification exercise against archive-calibrated products, not a new calibration reference file or a replacement for CALACS.
-- The real sample (3 FLT/FLC pairs, 36 usable trail measurements) is a bounded first-release check, not a survey-scale characterization.
+- The real sample is three consecutive exposures of one field. Its 38 accepted measurements reduce to 34 coordinate clusters and are not a survey-scale characterization.
+- The published real-data result covers the parallel-trail estimator only. Serial-trail code exists and is unit tested but is not used for this result.
+- A four-pixel source buffer reduces PSF-wing contamination; it does not prove that the fitted exponential is pure deferred charge.
 - Charge- and transfer-distance-binned results are individually underpowered (n<30 per bin) and are reported with that caveat rather than treated as conclusive.
 - Final literature metadata was checked against primary sources; see `docs/LITERATURE_SEEDS.md` for any items still marked `VERIFICATION_PENDING`.
 
@@ -66,6 +72,8 @@ Biswajit Jana
 
 BSD-3-Clause for original code. Mission/archive products retain their original terms.
 
-## Research Quality Upgrade
+## Research maturity comparison
 
-See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors, equations and research boundaries added to this repository.
+![Research maturity before 68 and after 95](figures/research-maturity-before-after.svg)
+
+The 68→95 score is an auditable repository-practice rubric, not peer review, scientific merit or a literal multiplier of research quality. See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for its scope.

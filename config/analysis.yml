@@ -1,5 +1,5 @@
 project:
-  title: "HST ACS/WFC Two-Axis CTE Trail Audit"
+  title: "HST ACS/WFC Parallel-Trail Estimator Audit"
   repository: "hst-acs-two-axis-cte-audit"
   author: "Biswajit Jana"
   curation_status: "BUILD_FIRST"

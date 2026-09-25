@@ -135,79 +135,27 @@ function MetricCard({ metric, featured = false }) {
   );
 }
 
-function inverseNormalCDF(p) {
-  if (p <= 0 || p >= 1) return NaN;
-  const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
-  const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
-  const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
-  const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
-  const pLow = 0.02425;
-  const pHigh = 1 - pLow;
-  let q;
-  let r;
-  if (p < pLow) {
-    q = Math.sqrt(-2 * Math.log(p));
-    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-  }
-  if (p <= pHigh) {
-    q = p - 0.5;
-    r = q * q;
-    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
-  }
-  q = Math.sqrt(-2 * Math.log(1 - p));
-  return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-}
-
-function ConfidenceExplorer({ metrics }) {
-  const withCI = (metrics || []).filter((metric) => metric.uncertainty_low != null && metric.uncertainty_high != null);
-  const [selected, setSelected] = useState(null);
-  const [confidence, setConfidence] = useState(95);
-
-  useEffect(() => {
-    if (!selected && withCI.length > 0) setSelected(withCI[0].name);
-  }, [withCI, selected]);
-
-  if (withCI.length === 0) return null;
-  const metric = withCI.find((item) => item.name === selected) ?? withCI[0];
-  const halfWidth95 = (metric.uncertainty_high - metric.uncertainty_low) / 2;
-  const sigma = halfWidth95 / 1.959963984540054;
-  const zLevel = inverseNormalCDF(0.5 + confidence / 200);
-  const lo = metric.estimate - zLevel * sigma;
-  const hi = metric.estimate + zLevel * sigma;
-
+function RobustnessAudit({ state }) {
+  if (state.loading) return <Section icon={Beaker} eyebrow="Sensitivity audit" title="Archive and dependence checks"><p className="text-sm text-slate-400">Loading robustness evidence…</p></Section>;
+  if (state.error || !state.data) return <Section icon={AlertCircle} eyebrow="Sensitivity audit" title="Archive and dependence checks"><p className="text-sm text-red-200">Robustness evidence could not be loaded.</p></Section>;
+  const audit = state.data;
+  const refresh = audit.archive_refresh;
+  const exposureValues = Object.values(audit.exposure_medians);
+  const deletionValues = Object.values(audit.leave_one_exposure_out_medians);
   return (
-    <Section icon={Beaker} eyebrow="Sensitivity check" title="Confidence-level explorer" className="h-full">
-      <p className="text-sm leading-relaxed text-slate-400">
-        Approximate interval derived from the reported 95% bootstrap bounds under a normal sampling
-        distribution. It does not re-run the bootstrap; the 95% interval above is the computed result.
+    <Section icon={Beaker} eyebrow="Sensitivity audit" title="Archive and dependence checks" className="h-full">
+      <div className="evidence-ledger">
+        <div><span>Current MAST-byte median</span><strong>{refresh.current_median_suppression.toFixed(3)}</strong></div>
+        <div><span>Prior manifest-byte median</span><strong>{refresh.baseline_median_suppression.toFixed(3)}</strong></div>
+        <div><span>Coordinate-cluster median</span><strong>{audit.cluster_median_suppression.toFixed(3)}</strong></div>
+        <div><span>Cluster bootstrap 95% interval</span><strong>[{audit.cluster_bootstrap_95_interval.map((value) => value.toFixed(3)).join(', ')}]</strong></div>
+        <div><span>Single-exposure medians</span><strong>{Math.min(...exposureValues).toFixed(3)}–{Math.max(...exposureValues).toFixed(3)}</strong></div>
+        <div><span>Leave-one-exposure-out</span><strong>{Math.min(...deletionValues).toFixed(3)}–{Math.max(...deletionValues).toFixed(3)}</strong></div>
+      </div>
+      <p className="mt-5 border-l-2 border-amber-500/70 pl-4 text-sm leading-relaxed text-slate-300">
+        All six archive hashes changed after reprocessing. The direction remains positive, but the estimator is not numerically stable enough for a population-level calibration claim.
       </p>
-      {withCI.length > 1 && (
-        <select
-          className="mt-5 w-full rounded-sm border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200"
-          value={metric.name}
-          onChange={(event) => setSelected(event.target.value)}
-        >
-          {withCI.map((item) => <option key={item.name} value={item.name}>{item.name.replace(/_/g, ' ')}</option>)}
-        </select>
-      )}
-      <label className="mt-6 flex items-center justify-between text-sm text-slate-300">
-        <span>Confidence level</span>
-        <span className="font-mono text-blue-300">{confidence.toFixed(1)}%</span>
-      </label>
-      <input
-        type="range"
-        min="50"
-        max="99.9"
-        step="0.1"
-        value={confidence}
-        onChange={(event) => setConfidence(Number(event.target.value))}
-        className="mt-3 w-full accent-blue-500"
-      />
-      <p className="mt-5 font-mono text-2xl font-semibold text-slate-100">
-        [{lo.toPrecision(4)}, {hi.toPrecision(4)}]
-        <span className="ml-2 text-xs font-normal text-slate-400">{metric.units}</span>
-      </p>
-      <p className="mt-2 text-xs text-slate-500">estimate {metric.estimate.toPrecision(4)} · n={metric.sample_size}</p>
+      <p className="mt-4 text-xs leading-relaxed text-slate-500">{audit.claim_boundary}</p>
     </Section>
   );
 }
@@ -311,6 +259,7 @@ export default function App() {
   const summary = useJson('./results/summary.json');
   const warnings = useJson('./results/warnings.json');
   const benchmarks = useJson('./results/benchmarks.json');
+  const robustness = useJson('./results/robustness.json');
 
   if (project.loading) {
     return <main className="detector-bg grid min-h-screen place-items-center text-sm uppercase tracking-[0.2em] text-blue-200">Loading detector audit…</main>;
@@ -324,7 +273,9 @@ export default function App() {
   const isDemo = summary.data?.data_kind === 'synthetic_smoke_test' || summary.data?.data_kind === 'synthetic_demo';
 
   return (
-    <main className="detector-bg min-h-screen">
+    <>
+    <a className="skip-link" href="#main">Skip to research evidence</a>
+    <main id="main" className="detector-bg min-h-screen">
       <div className="mx-auto max-w-[90rem] px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
         <header className="hero-grid overflow-hidden rounded-[1.6rem] border border-slate-700/70 bg-slate-950/80">
           <div className="flex flex-col justify-between p-6 md:p-9 lg:p-11">
@@ -379,7 +330,7 @@ export default function App() {
                 </dl>
               )}
             </Section>
-            <ConfidenceExplorer metrics={metrics} />
+            <RobustnessAudit state={robustness} />
           </aside>
 
           <section aria-labelledby="measurement-summary">
@@ -464,6 +415,9 @@ export default function App() {
             <div className="flex flex-wrap gap-2 text-sm">
               <a className="download-link" href="./manifest.csv" download>data/manifest.csv</a>
               <a className="download-link" href="./results/summary.json" download>results/summary.json</a>
+              <a className="download-link" href="./results/robustness.json" download>results/robustness.json</a>
+              <a className="download-link" href="./results/robustness_designs.csv" download>robustness designs</a>
+              <a className="download-link" href="./results/measurements.csv" download>measurement ledger</a>
               {benchmarks.data && <a className="download-link" href="./results/benchmarks.json" download>results/benchmarks.json</a>}
             </div>
             <p className="mt-5 text-xs leading-relaxed text-slate-500">
@@ -479,5 +433,6 @@ export default function App() {
         </footer>
       </div>
     </main>
+    </>
   );
 }
