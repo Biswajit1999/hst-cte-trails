@@ -1,0 +1,9 @@
+{
+  "baseline_commit": "5f175cf",
+  "retrieved_utc": "2026-07-13T16:57:51.570047+00:00",
+  "product_date": "pre-2026-08-05 reprocessing",
+  "median_suppression_fraction": 0.7888485396297149,
+  "hot_pixel_mean_excess": -5.477700375113089,
+  "hot_pixel_95_interval": [-7.801767836129749, -3.3911242709678775],
+  "note": "Values and hashes transcribed from commit 5f175cf; the old FITS bytes are not redistributed here."
+}

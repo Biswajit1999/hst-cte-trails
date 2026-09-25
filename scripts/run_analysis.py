@@ -9,6 +9,7 @@ scope limitation in docs/BENCHMARK_PLAN.md reporting.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import platform
 import sys
@@ -48,6 +49,36 @@ def _write_benchmark(path: Path, label: str, wall_time_s: float, peak_memory_mib
     existing = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
     existing.append(payload)
     path.write_text(json.dumps(existing, indent=2), encoding="utf-8")
+
+
+def _write_measurements(path: Path, measurements) -> None:
+    fields = (
+        "rootname",
+        "x",
+        "y",
+        "flux",
+        "parallel_transfer_distance",
+        "flt_total_charge",
+        "flc_total_charge",
+        "suppression_fraction",
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for measurement in measurements:
+            writer.writerow(
+                {
+                    "rootname": measurement.rootname,
+                    "x": measurement.x,
+                    "y": measurement.y,
+                    "flux": measurement.flux,
+                    "parallel_transfer_distance": measurement.parallel_transfer_distance,
+                    "flt_total_charge": measurement.suppression.flt_total_charge,
+                    "flc_total_charge": measurement.suppression.flc_total_charge,
+                    "suppression_fraction": measurement.suppression.suppression_fraction,
+                }
+            )
 
 
 def run_demo() -> None:
@@ -157,6 +188,7 @@ def run_real_data(config_path: Path, manifest_path: Path, raw_dir: Path, results
         provenance=provenance,
         warnings=result.warnings,
     )
+    _write_measurements(results_dir / "measurements.csv", result.measurements)
     (results_dir / "warnings.json").write_text(json.dumps(result.warnings, indent=2), encoding="utf-8")
 
     _write_benchmark(results_dir / "benchmarks.json", "real_data", elapsed, peak / (1024 * 1024), len(manifest_rows))
