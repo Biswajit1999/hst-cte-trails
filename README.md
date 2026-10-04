@@ -71,9 +71,3 @@ Biswajit Jana
 ## Licence
 
 BSD-3-Clause for original code. Mission/archive products retain their original terms.
-
-## Research maturity comparison
-
-![Research maturity before 68 and after 95](figures/research-maturity-before-after.svg)
-
-The 68→95 score is an auditable repository-practice rubric, not peer review, scientific merit or a literal multiplier of research quality. See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for its scope.

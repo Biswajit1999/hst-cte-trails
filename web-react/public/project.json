@@ -15,8 +15,7 @@
     { "id": "fig04_suppression_vs_charge", "label": "Suppression vs charge" },
     { "id": "fig05_residual_vs_transfer_distance", "label": "Residual vs transfer distance" },
     { "id": "fig06_injection_recovery", "label": "Injection recovery" },
-    { "id": "fig07_archive_robustness", "label": "Archive refresh and dependence audit" },
-    { "id": "research-maturity-before-after", "label": "Research maturity before and after" }
+    { "id": "fig07_archive_robustness", "label": "Archive refresh and dependence audit" }
   ],
   "validationContract": [
     "synthetic exponential trails",
