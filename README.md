@@ -34,6 +34,12 @@ python scripts/make_figures.py --demo
 
 The demo path above uses clearly-labelled synthetic data for a fast smoke test. The real-data result requires the exact products in `data/manifest.csv`. `scripts/run_analysis.py` now stops on any size or SHA-256 mismatch rather than analyzing silently reprocessed bytes. After a verified real-data run, execute `python scripts/analyze_robustness.py`, `python scripts/make_figures.py`, and `python scripts/sync_web_assets.py`.
 
+An additional estimator-focused validation is reproducible with
+`python scripts/run_inference_validation.py`. It measures nominal interval
+coverage, fitting-window sensitivity, and single-exponential model
+misspecification using labelled synthetic profiles; see
+[`docs/INFERENCE_VALIDATION.md`](docs/INFERENCE_VALIDATION.md).
+
 For the web dashboard:
 
 ```bash
