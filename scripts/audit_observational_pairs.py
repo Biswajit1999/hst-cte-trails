@@ -1,4 +1,5 @@
 """Audit the committed-manifest ACS/WFC FLT/FLC observations at pixel level."""
+
 from __future__ import annotations
 
 import csv
@@ -6,6 +7,7 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import scienceplots  # noqa: F401
 
 from hst_acs_two_axis_cte_audit.core import pair_flt_flc
 from hst_acs_two_axis_cte_audit.observational_pair_audit import audit_flt_flc_pair
@@ -41,7 +43,8 @@ def main() -> None:
         "archive_pairs": len(pairs),
         "chip_comparisons": len(audits),
         "metadata": metadata,
-        "calibration_metadata_consistent": len({(m["cal_ver"], m["pctetab"]) for m in metadata}) == 1,
+        "calibration_metadata_consistent": len({(m["cal_ver"], m["pctetab"]) for m in metadata})
+        == 1,
         "maximum_absolute_fractional_net_charge_change": max(
             abs(row["fractional_net_charge_change"]) for row in audits
         ),
@@ -56,42 +59,45 @@ def main() -> None:
     )
 
     labels = [f"{row['rootname'][-3:]} / chip {row['chip']}" for row in audits]
-    figure, axes = plt.subplots(1, 2, figsize=(12, 4.8), constrained_layout=True)
-    axes[0].bar(labels, [100 * row["fractional_net_charge_change"] for row in audits], color="#0f766e")
-    axes[0].axhline(0, color="#334155", linewidth=0.8)
-    axes[0].set_ylabel("Net FLT→FLC change / |FLT charge| (%)")
-    axes[0].set_title("Whole-chip numerical charge closure")
-    axes[0].tick_params(axis="x", rotation=40)
-
     error_ratio_change_percent = [
         100 * (row["median_flc_to_flt_error_ratio"] - 1) for row in audits
     ]
-    axes[1].scatter(
-        error_ratio_change_percent,
-        [row["correction_rms_over_flt_error"] for row in audits],
-        c=[row["chip"] for row in audits],
-        cmap="viridis",
-        s=75,
-    )
-    for index, (label, row, ratio_change) in enumerate(
-        zip(labels, audits, error_ratio_change_percent, strict=True)
-    ):
-        axes[1].annotate(
-            label,
-            (ratio_change, row["correction_rms_over_flt_error"]),
-            xytext=(5, 5 if index % 2 == 0 else -10),
-            textcoords="offset points",
-            fontsize=7,
+    with plt.style.context(["science", "no-latex", "bright"]):
+        figure, axes = plt.subplots(1, 2, figsize=(9.5, 3.9), constrained_layout=True)
+        axes[0].bar(
+            labels,
+            [100 * row["fractional_net_charge_change"] for row in audits],
         )
-    axes[1].set_xlabel("Median FLC / FLT ERR change (%)")
-    axes[1].set_ylabel("RMS correction / median FLT ERR")
-    axes[1].set_title("Correction scale relative to uncertainty arrays")
-    figure.suptitle("Observed ACS/WFC FLT–FLC pair audit", fontweight="bold")
-    figure.savefig(FIGURES / "fig08_observational_pair_audit.png", dpi=180)
-    plt.close(figure)
+        axes[0].axhline(0, color="0.3", linewidth=0.8)
+        axes[0].set(
+            ylabel="Net FLT--FLC change / |FLT charge| [%]",
+            title="(a) Whole-chip charge closure",
+        )
+        axes[0].tick_params(axis="x", rotation=32, labelsize=7)
+
+        markers = {1: "s", 2: "o"}
+        for index, (label, row, ratio_change) in enumerate(
+            zip(labels, audits, error_ratio_change_percent, strict=True)
+        ):
+            axes[1].scatter(
+                ratio_change,
+                row["correction_rms_over_flt_error"],
+                marker=markers[row["chip"]],
+                s=55,
+                label=label,
+            )
+        axes[1].set(
+            xlabel="Median FLC / FLT ERR change [%]",
+            ylabel="RMS correction / median FLT ERR",
+            title="(b) Correction vs uncertainty scale",
+        )
+        axes[1].legend(frameon=False, fontsize=6, ncol=2)
+        figure.suptitle("Observed ACS/WFC FLT--FLC pair audit")
+        figure.savefig(FIGURES / "fig08_observational_pair_audit.png", dpi=240)
+        figure.savefig(FIGURES / "fig08_observational_pair_audit.pdf")
+        plt.close(figure)
     print(f"Audited {len(pairs)} verified archive pairs across {len(audits)} detector chips")
 
 
 if __name__ == "__main__":
     main()
-
