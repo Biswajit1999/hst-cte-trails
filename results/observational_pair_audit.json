@@ -1,0 +1,35 @@
+{
+  "data_kind": "real public HST ACS/WFC calibrated archive observations",
+  "archive_pairs": 3,
+  "chip_comparisons": 6,
+  "metadata": [
+    {
+      "rootname": "jfnx01mhq",
+      "proposal_id": 18004,
+      "date_obs": "2026-07-02",
+      "exptime_seconds": 462.0,
+      "cal_ver": "10.4.1 (08-Aug-2025)",
+      "pctetab": "jref$8ch1518tj_cte.fits"
+    },
+    {
+      "rootname": "jfnx01miq",
+      "proposal_id": 18004,
+      "date_obs": "2026-07-02",
+      "exptime_seconds": 462.0,
+      "cal_ver": "10.4.1 (08-Aug-2025)",
+      "pctetab": "jref$8ch1518tj_cte.fits"
+    },
+    {
+      "rootname": "jfnx01mkq",
+      "proposal_id": 18004,
+      "date_obs": "2026-07-02",
+      "exptime_seconds": 462.0,
+      "cal_ver": "10.4.1 (08-Aug-2025)",
+      "pctetab": "jref$8ch1518tj_cte.fits"
+    }
+  ],
+  "calibration_metadata_consistent": true,
+  "maximum_absolute_fractional_net_charge_change": 0.002833365335362448,
+  "maximum_dq_disagreement_fraction": 0.06138467788696289,
+  "claim_boundary": "These are FLT/FLC product-consistency diagnostics. The latent untrailed sky is unknown, so they do not measure absolute CTE-correction accuracy."
+}
