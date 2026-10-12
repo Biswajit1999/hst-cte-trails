@@ -11,6 +11,7 @@ data/raw/*
 /results/*
 !/results/*.json
 !/results/*.csv
+!/results/*.png
 /build/
 /src/*.egg-info/
 web-react/node_modules/
