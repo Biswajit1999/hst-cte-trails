@@ -40,6 +40,13 @@ coverage, fitting-window sensitivity, and single-exponential model
 misspecification using labelled synthetic profiles; see
 [`docs/INFERENCE_VALIDATION.md`](docs/INFERENCE_VALIDATION.md).
 
+The real archive pairs also have a pixel-level product audit. Run
+`python scripts/audit_observational_pairs.py` after downloading the exact
+manifest products. It verifies pair identity and calibration state, then checks
+whole-chip charge closure, DQ-mask agreement, correction scale and ERR-array
+scaling without claiming access to the unknown untrailed sky; see
+[`docs/OBSERVATIONAL_PAIR_AUDIT.md`](docs/OBSERVATIONAL_PAIR_AUDIT.md).
+
 For the web dashboard:
 
 ```bash
