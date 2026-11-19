@@ -4,6 +4,12 @@
 
 > **Curation:** `BUILD_FIRST` · Priority 9.6/10 · real public HST ACS/WFC FLT/FLC products
 
+## Research evidence and downloads
+
+[Open the evidence browser file](evidence.html) for 16 selected files, including [`summary.json`](results/summary.json). Each file has a download link and SHA-256 digest. Serve this checkout with `python -m http.server` to view the static browser.
+
+Rebuild the inventory and browser with `python scripts/evidence_catalog.py` and `python scripts/render_evidence_page.py`.
+
 ## Scientific question
 
 How stable is a fitted parallel-trail suppression estimator across archive reprocessing, repeated exposures and exposure deletion?
