@@ -1,0 +1,86 @@
+{
+  "project": "HST ACS/WFC Parallel-Trail Estimator Audit",
+  "repository": "https://github.com/Biswajit1999/hst-cte-trails",
+  "files": [
+    {
+      "label": "Project observational pair audit",
+      "path": "docs/OBSERVATIONAL_PAIR_AUDIT.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Provenance",
+      "path": "data/provenance.yml",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Archive refresh baseline",
+      "path": "data/archive-refresh-baseline.json",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Manifest",
+      "path": "data/manifest.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Research reference",
+      "path": "data/research-reference.json",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Demo",
+      "path": "data/example/demo.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Summary",
+      "path": "results/summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig06 injection recovery",
+      "path": "figures/fig06_injection_recovery.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Inference validation",
+      "path": "results/inference_validation.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Window sensitivity",
+      "path": "results/window_sensitivity.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig01 detector geometry",
+      "path": "figures/fig01_detector_geometry.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig02 example trails",
+      "path": "figures/fig02_example_trails.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig06 injection recovery",
+      "path": "figures/fig06_injection_recovery.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Inference validation",
+      "path": "results/inference_validation.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig00 smoke test",
+      "path": "figures/fig00_smoke_test.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig01 detector geometry",
+      "path": "figures/fig01_detector_geometry.png",
+      "role": "Figures"
+    }
+  ]
+}
